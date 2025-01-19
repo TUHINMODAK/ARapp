@@ -4,9 +4,9 @@ import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
 import { StackNavigationProp } from '@react-navigation/stack';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';  
-//import Icon from 'react-native-vector-icons/MaterialIcons'; // Import the eye icon
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../configs/FirebaseConfig'; // Ensure you have the correct Firebase config
 
-// Define your navigation types
 type RootStackParamList = {
   Login: undefined;
   Browse: undefined;
@@ -24,11 +24,8 @@ interface LoginState {
   password: string;
   errors: string[];
   loading: boolean;
-  showPassword: boolean;  // State to toggle password visibility
+  showPassword: boolean;
 }
-
-const VALID_EMAIL = "ARAPP@gmail.com";
-const VALID_PASSWORD = "12345";
 
 export default class Login extends Component<LoginProps, LoginState> {
   state: LoginState = {
@@ -36,7 +33,7 @@ export default class Login extends Component<LoginProps, LoginState> {
     password: '',
     errors: [],
     loading: false,
-    showPassword: false,  // Initialize as false to hide password initially
+    showPassword: false,
   };
 
   handleLogin = () => {
@@ -49,28 +46,37 @@ export default class Login extends Component<LoginProps, LoginState> {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    // Validate email format
+    // Validate email format before Firebase call
     if (!emailRegex.test(email)) {
       errors.push('email');
     }
-    // Validate static credentials (replace with API call in production)
-    if (email !== VALID_EMAIL) {
-      errors.push('email');
-    }
-    if (password !== VALID_PASSWORD) {
-      errors.push('password');
+    if (errors.length) {
+      this.setState({ errors, loading: false });
+      return;
     }
 
-    this.setState({ errors, loading: false });
-
-    if (!errors.length) {
-      navigation.navigate("Browse");
-    }
+    // Firebase authentication logic
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => {
+        this.setState({ loading: false });
+        navigation.navigate('Browse');
+      })
+      .catch((error) => {
+        console.error(error);
+        const errorCode = error.code;
+        const errorMessages: string[] = [];
+        if (errorCode === 'auth/user-not-found' || errorCode === 'auth/wrong-password') {
+          errorMessages.push('email', 'password');
+        } else if (errorCode === 'auth/invalid-email') {
+          errorMessages.push('email');
+        }
+        this.setState({ errors: errorMessages, loading: false });
+      });
   };
 
   togglePasswordVisibility = () => {
-    this.setState(prevState => ({
-      showPassword: !prevState.showPassword,  // Toggle the password visibility
+    this.setState((prevState) => ({
+      showPassword: !prevState.showPassword,
     }));
   };
 
@@ -78,47 +84,38 @@ export default class Login extends Component<LoginProps, LoginState> {
     const { navigation } = this.props;
     const { loading, errors, email, password, showPassword } = this.state;
 
-    const hasErrors = (key: string) => errors.includes(key); // Return a boolean
+    const hasErrors = (key: string) => errors.includes(key);
 
     return (
       <KeyboardAvoidingView style={styles.login} behavior="padding">
         <Block padding={[0, theme.sizes.base * 2]}>
-          <Text h1 bold style={styles.title} >Login</Text>
+          <Text h1 bold style={styles.title}>Login</Text>
           <Block middle>
             <Input
               label="Email"
-              error={hasErrors('email')} // This is now a boolean
-              style={[styles.input, hasErrors('email') && styles.hasErrors]} // Handle error styling separately
+              error={hasErrors('email')}
+              style={[styles.input, hasErrors('email') && styles.hasErrors]}
               placeholder="Enter your email"
-              value={email} // Use value instead of defaultValue for controlled input
-              onChangeText={(text: string) => this.setState({ email: text })} // Explicitly type 'text' as string
+              value={email}
+              onChangeText={(text: any) => this.setState({ email: text })}
             />
             <Input
-              secure={!showPassword}  // Toggle password visibility using showPassword state
+              secure={!showPassword}
               label="Password"
-              error={hasErrors('password')} // This is now a boolean
-              style={[styles.input, hasErrors('password') && styles.hasErrors]} // Handle error styling separately
+              error={hasErrors('password')}
+              style={[styles.input, hasErrors('password') && styles.hasErrors]}
               placeholder="Enter your password"
-              value={password} // Use value instead of defaultValue for controlled input
-              onChangeText={(text: string) => this.setState({ password: text })} // Explicitly type 'text' as string
+              value={password}
+              onChangeText={(text: any) => this.setState({ password: text })}
               rightIcon={
                 <TouchableOpacity onPress={this.togglePasswordVisibility}>
                   <FontAwesome
-                  name={showPassword ? 'eye' : 'eye-slash'} // Use FontAwesome icons
-                  size={24}
-                  color={theme.colors.gray2}
+                    name={showPassword ? 'eye' : 'eye-slash'}
+                    size={24}
+                    color={theme.colors.gray2}
                   />
                 </TouchableOpacity>
               }
-              // rightIcon={
-              //   <TouchableOpacity onPress={this.togglePasswordVisibility}>
-              //     <Icon
-              //       name={showPassword ? 'visibility' : 'visibility_off'} // Valid Material Icons
-              //       size={24}
-              //       color={theme.colors.gray2}
-              //     />
-              //   </TouchableOpacity>
-              // }
             />
             {errors.includes('email') && (
               <Text caption accent>Invalid email or email format.</Text>
@@ -150,7 +147,7 @@ const styles = StyleSheet.create({
   login: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20, // Add consistent padding for the whole page 
+    padding: 20,
   },
   input: {
     borderRadius: 0,
@@ -159,13 +156,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   hasErrors: {
-    borderBottomColor: theme.colors.accent, // This is now applied through the style prop
+    borderBottomColor: theme.colors.accent,
   },
-  title:{
+  title: {
     fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 0,
-    marginTop:100,
+    marginTop: 100,
     color: '#333',
-  }
+  },
 });

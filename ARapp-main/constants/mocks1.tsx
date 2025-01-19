@@ -1,9 +1,11 @@
 interface FurnitureVariant {
   name: string;
-  image: any; // Use a more specific type if possible, such as ImageSourcePropType
+  image: any; // Use a specific type like ImageSourcePropType for React Native images
   color: string;
   price: number;
-  dimensions: string;
+  dimensions: string; // Furniture dimensions
+  roomType: string;   // Suggested room type (e.g., "Living Room")
+  furnitureType: string; // Category of furniture (e.g., "Sofa")
 }
 
 
@@ -111,6 +113,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Modern Sofa - Variant 2',
@@ -118,6 +122,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
 
     },
   ],
@@ -128,6 +134,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Classic Sofa - Variant 2',
@@ -135,6 +143,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   sofa3: [
@@ -144,6 +154,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'L-Shaped Sofa - Variant 2',
@@ -151,6 +163,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   dining1: [
@@ -160,6 +174,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Wooden Dining Table - Variant 2',
@@ -167,6 +183,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   dining2: [
@@ -176,6 +194,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Glass Dining Table - Variant 2',
@@ -183,6 +203,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   bed1: [
@@ -192,6 +214,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Queen Size Bed - Variant 2',
@@ -199,6 +223,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   bed2: [
@@ -208,6 +234,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'King Size Bed - Variant 2',
@@ -215,6 +243,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   closet1: [
@@ -224,6 +254,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Sliding Door Closet - Variant 2',
@@ -231,6 +263,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   closet2: [
@@ -240,6 +274,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa'
     },
     {
       name: 'Classic Wooden Closet - Variant 2',
@@ -247,6 +283,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   chair1: [
@@ -256,6 +294,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Office Chair - Variant 2',
@@ -263,6 +303,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   chair2: [
@@ -272,6 +314,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Dining Chair - Variant 2',
@@ -279,6 +323,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   desk1: [
@@ -288,6 +334,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Wooden Office Desk - Variant 2',
@@ -295,6 +343,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
   desk2: [
@@ -304,6 +354,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
     {
       name: 'Modern Office Desk - Variant 2',
@@ -311,6 +363,8 @@ const sofaDetails: Record<string, FurnitureVariant[]> = {
       color: 'Gray',
       price: 899.99,
       dimensions: '84" x 36" x 32"',
+      roomType: 'Living Room',
+      furnitureType: 'Sofa',
     },
   ],
 };
@@ -333,4 +387,3 @@ export const furnitureModels: Record<FurnitureModelKey, any> = {
 
 
 export { sofas, diningTables, beds, closets, chairs, officeDesks, sofaDetails };
-

@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
-
 import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
-
-// Define the valid email for this example
-const VALID_EMAIL = "ARAPP@gmail.com";
+import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
 
 interface ForgotState {
   email: string;
@@ -15,12 +12,11 @@ interface ForgotState {
 
 export default class Forgot extends Component<any, ForgotState> {
   state: ForgotState = {
-    email: VALID_EMAIL, // Default email
-    errors: [], // Array to track validation errors
-    loading: false, // Loading state
+    email: '', // Initialize email as empty
+    errors: [],
+    loading: false,
   };
 
-  // Method to handle forgot password functionality
   handleForgot = () => {
     const { navigation } = this.props;
     const { email } = this.state;
@@ -29,40 +25,43 @@ export default class Forgot extends Component<any, ForgotState> {
     Keyboard.dismiss();
     this.setState({ loading: true });
 
-    // Validate email (check with backend API or static value)
-    if (email !== VALID_EMAIL) {
+    // Check if email is empty
+    if (!email) {
       errors.push('email');
+      this.setState({ errors, loading: false });
+      Alert.alert('Error', 'Please enter an email address.', [{ text: 'OK' }], { cancelable: false });
+      return;
     }
 
-    this.setState({ errors, loading: false });
-
-    if (!errors.length) {
-      Alert.alert(
-        'Password Sent!',
-        'Please check your email.',
-        [
-          {
-            text: 'OK',
-            onPress: () => {
-              navigation.navigate('Login');
+    const auth = getAuth();
+    sendPasswordResetEmail(auth, email)
+      .then(() => {
+        this.setState({ loading: false });
+        Alert.alert(
+          'Success',
+          'Password reset email sent. Please check your inbox.',
+          [
+            {
+              text: 'OK',
+              onPress: () => navigation.navigate('Login'),
             },
-          },
-        ],
-        { cancelable: false }
-      );
-    } else {
-      Alert.alert(
-        'Error',
-        'Please check your email address.',
-        [
-          { text: 'Try again' },
-        ],
-        { cancelable: false }
-      );
-    }
+          ],
+          { cancelable: false }
+        );
+      })
+      .catch((error) => {
+        this.setState({ loading: false });
+        const errorCode = error.code;
+        let errorMessage = 'An error occurred. Please try again later.';
+        if (errorCode === 'auth/invalid-email') {
+          errorMessage = 'Invalid email address format.';
+        } else if (errorCode === 'auth/user-not-found') {
+          errorMessage = 'No user found with this email.';
+        }
+        Alert.alert('Error', errorMessage, [{ text: 'Try again' }], { cancelable: false });
+      });
   };
 
-  // Helper function to check for errors
   hasErrors = (key: string): boolean => {
     return this.state.errors.includes(key);
   };
@@ -80,8 +79,8 @@ export default class Forgot extends Component<any, ForgotState> {
               label="Email"
               error={this.hasErrors('email')}
               style={[styles.input, this.hasErrors('email') && styles.hasErrors]}
-              value={email} // Controlled input
-              onChangeText={(text: string) => this.setState({ email: text })} // Explicitly type 'text'
+              value={email}
+              onChangeText={(text: string) => this.setState({ email: text })}
               placeholder="Enter your email"
             />
             <Button gradient onPress={this.handleForgot}>
@@ -118,11 +117,11 @@ const styles = StyleSheet.create({
   hasErrors: {
     borderBottomColor: theme.colors.accent,
   },
-  title:{
+  title: {
     fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 0,
-    marginTop:100,
+    marginTop: 100,
     color: '#333',
-  }
+  },
 });

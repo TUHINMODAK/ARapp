@@ -8,21 +8,30 @@ export type RootStackParamList = {
   Forgot: undefined;
   Browse: undefined;
   Explore: undefined;
+  FormPage: {
+    detectedColor :string;
+  };
   Product: undefined;
+  ResultPage: { 
+    dimensions: string; 
+    roomType: string; 
+    furnitureType: string;
+    detectedColor: string; // Added detectedColor to ResultPage parameters
+  };
   Settings: undefined;
   Cam: undefined;
   SofaDetails: { 
     id: string; 
-    categoryName?: string 
+    categoryName?: string;
   };
   Sofa1: { 
     category: {
       name: string;
       // Add other category properties as needed
-    } 
+    };
   };
   ARscene: { 
-    variantName: string 
+    variantName: string;
   };
 };
 

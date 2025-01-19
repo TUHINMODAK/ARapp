@@ -1,14 +1,19 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Camera, useCameraDevices, PhotoFile } from 'react-native-vision-camera';
-import { encode } from 'base-64';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../navigation/types'; // Adjust the path as needed
+
+type NavigationProp = StackNavigationProp<RootStackParamList, 'Cam'>;
 
 const Cam: React.FC = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
   const device = devices.find(d => d.position === 'back');
   const camera = useRef<Camera>(null);
-  
+  const navigation = useNavigation<NavigationProp>();
+
   useEffect(() => {
     (async () => {
       const permission = await Camera.requestCameraPermission();
@@ -18,13 +23,10 @@ const Cam: React.FC = () => {
 
   const takePicture = async () => {
     try {
-      const photo = await camera.current?.takePhoto({
-       // quality: 'balanced'
-      });
-
+      const photo = await camera.current?.takePhoto();
       if (photo) {
-        // Handle the photo, e.g., upload or save
         await uploadPhoto(photo);
+        // Redirect to FormPage after taking the photo
       }
     } catch (error) {
       console.error('Failed to take photo', error);
@@ -33,16 +35,13 @@ const Cam: React.FC = () => {
 
   const uploadPhoto = async (photo: PhotoFile) => {
     try {
-      // Read file and convert to base64 using fetch for web/file API
       const response = await fetch(`file://${photo.path}`);
       const blob = await response.blob();
-      
-      // Convert blob to base64
+
       const reader = new FileReader();
       reader.readAsDataURL(blob);
       reader.onloadend = async () => {
         const base64data = reader.result as string;
-        // Remove the data URL prefix
         const base64 = base64data.split(',')[1];
 
         try {
@@ -54,8 +53,14 @@ const Cam: React.FC = () => {
             body: JSON.stringify({ image: base64 }),
           });
 
-          const data = await uploadResponse.json();
-          console.log('Upload response:', data);
+          const detectedColor = await uploadResponse.json();
+          console.log('Upload response:', detectedColor);
+
+          // Extract the color string from the detected color object
+          const color = detectedColor?.color || 'No color detected'; // Default to 'No color detected' if color is not available
+
+          // Navigate to FormPage with the color as a string
+          navigation.navigate('FormPage', { detectedColor: color });
         } catch (uploadError) {
           console.error('Upload failed', uploadError);
         }
@@ -69,7 +74,7 @@ const Cam: React.FC = () => {
   if (!device) return <Text>No back camera device found</Text>;
 
   return (
-    <View style={{flex:1}}>
+    <View style={{ flex: 1 }}>
       <Camera
         ref={camera}
         style={StyleSheet.absoluteFill}
@@ -78,10 +83,7 @@ const Cam: React.FC = () => {
         photo={true}
       />
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.captureButton}
-          onPress={takePicture}
-        >
+        <TouchableOpacity style={styles.captureButton} onPress={takePicture}>
           <View style={styles.captureButtonInner} />
         </TouchableOpacity>
       </View>

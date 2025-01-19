@@ -17,6 +17,8 @@ import Sofa1 from '../screens/sofa1';
 import { RootStackParamList } from './types'; // Import RootStackParamList
 import { theme } from '../constants';
 import CameraComponent from '../screens/Camera1';
+import FormPage from '../screens/FormPage';
+import ResultPage from '../screens/ResultPage';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -59,6 +61,8 @@ export default function Navigation() {
           {(props) => <Welcome {...props} />}
         </Stack.Screen>
         <Stack.Screen name="Cam" component={CameraComponent} />
+        <Stack.Screen name="FormPage" component={FormPage} />
+        <Stack.Screen name="ResultPage" component={ResultPage} />
 
         <Stack.Screen
           name="Sofa1"

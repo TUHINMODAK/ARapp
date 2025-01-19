@@ -1,138 +1,137 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, ScrollView, TextInput } from 'react-native';
-import Slider from '@react-native-community/slider';
+import React, { Component } from 'react';
+import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
 
-import { Divider, Button, Block, Text, Switch } from '../components';
-import { theme, mocks } from '../constants';
+import { Button, Block, Input, Text } from '../components';
+import { theme } from '../constants';
 
-// Define a type for the profile object
-type Profile = {
-  username: string;
-  location: string;
-  avatar: any; // Use appropriate type for the avatar (e.g., ImageSourcePropType)
-};
+interface SignUpState {
+  email: string | null;
+  username: string | null;
+  password: string | null;
+  errors: string[];
+  loading: boolean;
+}
 
-// Define a type for the Settings props
-type SettingsProps = {
-  profile: Profile;
-};
-
-const Settings: React.FC<SettingsProps> = ({ profile: defaultProfile }) => {
-  const [profile, setProfile] = useState<Profile>(defaultProfile);
-  const [budget, setBudget] = useState(850);
-  const [monthly, setMonthly] = useState(1700);
-  const [notifications, setNotifications] = useState(true);
-  const [newsletter, setNewsletter] = useState(false);
-  const [editing, setEditing] = useState<string | null>(null);
-
-  const handleEdit = (name: keyof Profile, text: string) => {
-    setProfile((prevProfile) => ({ ...prevProfile, [name]: text }));
+export default class SignUp extends Component<any, SignUpState> {
+  state: SignUpState = {
+    email: null,
+    username: null,
+    password: null,
+    errors: [],
+    loading: false,
   };
 
-  const toggleEdit = (name: keyof Profile) => {
-    setEditing((prevEditing) => (prevEditing === name ? null : name));
-  };
+  // Method to handle signup
+  handleSignUp = () => {
+    const { navigation } = this.props;
+    const { email, username, password } = this.state;
+    const errors: string[] = [];
 
-  const renderEdit = (name: keyof Profile) => {
-    if (editing === name) {
-      return (
-        <TextInput
-          defaultValue={profile[name]}
-          onChangeText={(text) => handleEdit(name, text)}
-        />
+    Keyboard.dismiss();
+    this.setState({ loading: true });
+
+    // Validation logic
+    if (!email) errors.push('email');
+    if (!username) errors.push('username');
+    if (!password) errors.push('password');
+
+    this.setState({ errors, loading: false });
+
+    if (!errors.length) {
+      Alert.alert(
+        'Success!',
+        'Your account has been created.',
+        [
+          {
+            text: 'Continue',
+            onPress: () => {
+              navigation.navigate('Browse');
+            },
+          },
+        ],
+        { cancelable: false }
       );
     }
-    return <Text bold>{profile[name]}</Text>;
   };
 
-  return (
-    <Block>
-      <Block flex={false} row center space="between" style={styles.header}>
-        <Text h1 bold>Settings</Text>
-        <Button>
-          <Image source={profile.avatar} style={styles.avatar} />
-        </Button>
-      </Block>
+  // Helper function for error checking
+  hasErrors = (key: string): boolean => {
+    return this.state.errors.includes(key);
+  };
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Block style={styles.inputs}>
-          <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
-            <Block>
-              <Text gray2 style={{ marginBottom: 10 }}>Username</Text>
-              {renderEdit('username')}
-            </Block>
-            <Text medium secondary onPress={() => toggleEdit('username')}>
-              {editing === 'username' ? 'Save' : 'Edit'}
-            </Text>
-          </Block>
-          <Block row space="between" margin={[10, 0]} style={styles.inputRow}>
-            <Block>
-              <Text gray2 style={{ marginBottom: 10 }}>Location</Text>
-              {renderEdit('location')}
-            </Block>
-            <Text medium secondary onPress={() => toggleEdit('location')}>
-              {editing === 'location' ? 'Save' : 'Edit'}
-            </Text>
-          </Block>
-        </Block>
+  render() {
+    const { navigation } = this.props;
+    const { loading, email, username, password } = this.state;
 
-        <Divider margin={[theme.sizes.base, theme.sizes.base * 2]} />
-
-        <Block style={styles.sliders}>
-          <Block margin={[10, 0]}>
-            <Text gray2 style={{ marginBottom: 10 }}>Budget</Text>
-            <Slider
-              minimumValue={0}
-              maximumValue={1000}
-              step={1}
-              value={budget}
-              onValueChange={setBudget}
-              minimumTrackTintColor={theme.colors.secondary}
-              maximumTrackTintColor="rgba(157, 163, 180, 0.10)"
+    return (
+      <KeyboardAvoidingView style={styles.signup} behavior="padding">
+        <Block padding={[0, theme.sizes.base * 2]}>
+          <Text h1 bold style={styles.title}>Sign Up</Text>
+          <Block middle>
+            <Input
+              email
+              label="Email"
+              error={this.hasErrors('email')}
+              style={[styles.input, this.hasErrors('email') && styles.hasErrors]}
+              value={email || ''}
+              onChangeText={(text: string) => this.setState({ email: text })}
+              placeholder="Enter your email"
             />
-            <Text caption gray right>${budget.toFixed(0)}</Text>
-          </Block>
+            <Input
+              label="Username"
+              error={this.hasErrors('username')}
+              style={[styles.input, this.hasErrors('username') && styles.hasErrors]}
+              value={username || ''}
+              onChangeText={(text: string) => this.setState({ username: text })}
+              placeholder="Enter your username"
+            />
+            <Input
+              secure
+              label="Password"
+              error={this.hasErrors('password')}
+              style={[styles.input, this.hasErrors('password') && styles.hasErrors]}
+              value={password || ''}
+              onChangeText={(text: string) => this.setState({ password: text })}
+              placeholder="Enter your password"
+            />
+            <Button gradient onPress={this.handleSignUp}>
+              {loading ? (
+                <ActivityIndicator size="small" color="white" />
+              ) : (
+                <Text bold white center>Sign Up</Text>
+              )}
+            </Button>
+
+            <Button  onPress={() => navigation.navigate('Login')} >
+              <Text gray caption center style={{ textDecorationLine: 'underline' }}>
+                Back to Login.
+              </Text>
+            </Button>
+          </Block> 
         </Block>
-
-        <Divider />
-
-        <Block style={styles.toggles}>
-          <Block row center space="between" style={{ marginBottom: theme.sizes.base * 2 }}>
-            <Text gray2>Notifications</Text>
-            <Switch value={notifications} onValueChange={setNotifications} />
-          </Block>
-        </Block>
-      </ScrollView>
-    </Block>
-  );
-};
-
-Settings.defaultProps = {
-  profile: mocks.profile,
-};
-
-export default Settings;
+      </KeyboardAvoidingView>
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  header: {
-    paddingHorizontal: theme.sizes.base * 2,
+  signup: {
+    flex: 1,
+    justifyContent: 'center',
   },
-  avatar: {
-    height: theme.sizes.base * 2.2,
-    width: theme.sizes.base * 2.2,
+  input: {
+    borderRadius: 0,
+    borderWidth: 0,
+    borderBottomColor: theme.colors.gray2,
+    borderBottomWidth: StyleSheet.hairlineWidth,
   },
-  inputs: {
-    marginTop: theme.sizes.base * 0.7,
-    paddingHorizontal: theme.sizes.base * 2,
+  hasErrors: {
+    borderBottomColor: theme.colors.accent,
   },
-  inputRow: {
-    alignItems: 'flex-end',
-  },
-  sliders: {
-    marginTop: theme.sizes.base * 0.7,
-    paddingHorizontal: theme.sizes.base * 2,
-  },
-  toggles: {
-    paddingHorizontal: theme.sizes.base * 2,
-  },
+  title:{
+    fontSize: 30,
+    marginBottom: 0,
+    marginTop:100,
+    color: '#333',
+  }
 });

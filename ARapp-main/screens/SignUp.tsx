@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { Alert, ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet } from 'react-native';
-
 import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../configs/FirebaseConfig'; // Update the path as necessary
 
 interface SignUpState {
   email: string | null;
@@ -35,23 +36,33 @@ export default class SignUp extends Component<any, SignUpState> {
     if (!username) errors.push('username');
     if (!password) errors.push('password');
 
-    this.setState({ errors, loading: false });
+    if (errors.length) {
+      this.setState({ errors, loading: false });
+      return;
+    }
 
-    if (!errors.length) {
-      Alert.alert(
-        'Success!',
-        'Your account has been created.',
-        [
+    // Firebase authentication
+    createUserWithEmailAndPassword(auth, email!, password!)
+      .then((userCredential) => {
+        // Account creation successful
+        const user = userCredential.user;
+        Alert.alert('Success!', 'Your account has been created.', [
           {
             text: 'Continue',
             onPress: () => {
-              navigation.navigate('Browse');
+              navigation.navigate('Browse'); // Change 'Browse' to your intended screen
             },
           },
-        ],
-        { cancelable: false }
-      );
-    }
+        ]);
+        this.setState({ loading: false });
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error(errorCode, errorMessage);
+        Alert.alert('Error', errorMessage);
+        this.setState({ loading: false });
+      });
   };
 
   // Helper function for error checking
@@ -66,7 +77,9 @@ export default class SignUp extends Component<any, SignUpState> {
     return (
       <KeyboardAvoidingView style={styles.signup} behavior="padding">
         <Block padding={[0, theme.sizes.base * 2]}>
-          <Text h1 bold style={styles.title}>Sign Up</Text>
+          <Text h1 bold style={styles.title}>
+            Sign Up
+          </Text>
           <Block middle>
             <Input
               email
@@ -98,16 +111,18 @@ export default class SignUp extends Component<any, SignUpState> {
               {loading ? (
                 <ActivityIndicator size="small" color="white" />
               ) : (
-                <Text bold white center>Sign Up</Text>
+                <Text bold white center>
+                  Sign Up
+                </Text>
               )}
             </Button>
 
-            <Button  onPress={() => navigation.navigate('Login')} >
+            <Button onPress={() => navigation.navigate('Login')}>
               <Text gray caption center style={{ textDecorationLine: 'underline' }}>
                 Back to Login.
               </Text>
             </Button>
-          </Block> 
+          </Block>
         </Block>
       </KeyboardAvoidingView>
     );
@@ -128,10 +143,10 @@ const styles = StyleSheet.create({
   hasErrors: {
     borderBottomColor: theme.colors.accent,
   },
-  title:{
+  title: {
     fontSize: 30,
     marginBottom: 0,
-    marginTop:100,
+    marginTop: 100,
     color: '#333',
-  }
+  },
 });

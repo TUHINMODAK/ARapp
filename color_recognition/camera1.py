@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import os
 import base64
 from color_classification_image1 import predict_color
+from colour_recom import ColorRecommender
 
 app = Flask(__name__)
 
@@ -14,6 +15,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 @app.route('/upload', methods=['POST'])
 def upload_image():
+    recommender = ColorRecommender()
     data = request.get_json()
 
     # Check if the image is in the request
@@ -34,7 +36,16 @@ def upload_image():
         prediction = predict_color(image_path)
         print('Detected color:', prediction)
 
-        return jsonify({"message": "Image uploaded and color detected", "color": prediction}), 200
+        recommendations_masc = recommender.get_recommendations('#0000FF', gender='masculine')
+        print("\nMasculine recommendations:")
+        print(recommendations_masc)
+        
+        # Or use color names with feminine preference
+        recommendations_fem = recommender.get_recommendations('blue', gender='feminine')
+        print("\nFeminine recommendations:")
+        print(recommendations_fem)
+
+        return jsonify({"message": "Image uploaded and color detected", "color": prediction},recommendations_masc,recommendations_fem), 200
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

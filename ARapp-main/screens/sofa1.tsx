@@ -41,7 +41,7 @@ const Sofa1: React.FC<SofaProps> = ({ navigation, route }) => {
   const categoryDataMap: CategoryDataMap = {
     'Sofa': sofas,
     'Dinning Table': diningTables,
-    'Bed': beds,
+    'Bed ': beds,
     'closet': closets,
     'Chair': chairs,
     'office Desk': officeDesks
@@ -93,7 +93,8 @@ const Sofa1: React.FC<SofaProps> = ({ navigation, route }) => {
           </TouchableOpacity>
         ))
       ) : (
-        <Text gray caption>No products available</Text>
+      <Text gray caption>No products available </Text>
+        
       )}
     </Block>
   </ScrollView>
