@@ -37,13 +37,13 @@ const Cam: React.FC = () => {
     try {
       const response = await fetch(`file://${photo.path}`);
       const blob = await response.blob();
-
+  
       const reader = new FileReader();
       reader.readAsDataURL(blob);
       reader.onloadend = async () => {
         const base64data = reader.result as string;
         const base64 = base64data.split(',')[1];
-
+  
         try {
           const uploadResponse = await fetch('http://192.168.1.5:5000/upload', {
             method: 'POST',
@@ -52,15 +52,16 @@ const Cam: React.FC = () => {
             },
             body: JSON.stringify({ image: base64 }),
           });
-
-          const detectedColor = await uploadResponse.json();
-          console.log('Upload response:', detectedColor);
-
-          // Extract the color string from the detected color object
-          const color = detectedColor?.color || 'No color detected'; // Default to 'No color detected' if color is not available
-
-          // Navigate to FormPage with the color as a string
-          navigation.navigate('FormPage', { detectedColor: color });
+  
+          const responseData = await uploadResponse.json();
+          console.log('Upload response:', responseData);
+  
+          // Extract the detected color value from the 0th index
+          const detectedColor = responseData[0]?.color || 'No color detected';
+          console.log('Detected Color:', detectedColor);
+  
+          // Navigate to FormPage with the detected color
+          navigation.navigate('FormPage', { detectedColor });
         } catch (uploadError) {
           console.error('Upload failed', uploadError);
         }
@@ -69,6 +70,7 @@ const Cam: React.FC = () => {
       console.error('Failed to read photo', error);
     }
   };
+  
 
   if (!hasPermission) return <Text>No camera permissions</Text>;
   if (!device) return <Text>No back camera device found</Text>;
