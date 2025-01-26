@@ -42,7 +42,7 @@ axios.get('http://192.168.1.2:5000/furnitures') // Replace with your backend's I
     .then((response) => {
         const datas = response.data;
         datas.forEach((element: { type: string | number; id: any; name: any; count: any; image: any; }) => {
-            furnitures[element.type].push({ id: element.id, name: element.name, count: element.count, image: { uri: `https://github.com/TUHINMODAK/ARapp/blob/main/ARapp-main/assets/images/${element.image}?raw=true` } });
+            furnitures[element.type].push({ id: element.id, image: { uri: `https://github.com/TUHINMODAK/ARapp/blob/main/ARapp-main/assets/icons/${element.image}?raw=true` }, name: element.name, count: element.count }); //https://github.com/TUHINMODAK/ARapp/blob/main/ARapp-main/assets/icons/${element.image}?raw=true
         });
         Object.keys(furnitures).forEach((category) => {
             furnitures[category].forEach((element) => {

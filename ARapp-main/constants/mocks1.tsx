@@ -70,7 +70,7 @@ export const Mocks1 = createContext<Mocks1ContextType>({
               if (!updatedFurnitures[element.type]) {
                 updatedFurnitures[element.type] = [];
               }
-              updatedFurnitures[element.type].push({ id: element.id, name: element.name, count: element.count, image: { uri: `https://github.com/TUHINMODAK/ARapp/blob/main/ARapp-main/assets/images/${element.image}?raw=true` } });
+              updatedFurnitures[element.type].push({ id: element.id, name: element.name, count: element.count, image: { uri: `https://github.com/TUHINMODAK/ARapp/blob/main/ARapp-main/assets/icons/${element.image}?raw=true` } });
               return updatedFurnitures;
             });
           });

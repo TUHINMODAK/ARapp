@@ -39,21 +39,22 @@ interface SofaProps {
 const Sofa1: React.FC<SofaProps> = ({ navigation, route }) => {
   const { furnitures } = useContext(Mocks1);
   const { sofas } = furnitures;
-  const {diningTables} = furnitures;
-  const {beds} = furnitures;
-  const {closets} = furnitures;
-  const {chairs} = furnitures;
-  const {officeDesks} = furnitures;
+  const { diningTables } = furnitures;
+  const { beds } = furnitures;
+  const { closets } = furnitures;
+  const { chairs } = furnitures;
+  const { officeDesks } = furnitures;
 
   // Map category names to their corresponding data arrays
   const categoryDataMap: CategoryDataMap = {
     'Sofa': sofas,
     'Dinning Table': diningTables,
-    'Bed ': beds,
+    'Bed': beds,
     'closet': closets,
     'Chair': chairs,
     'office Desk': officeDesks
   };
+
 
   // Get the category from navigation params
   const { category } = route.params;
@@ -93,7 +94,9 @@ const Sofa1: React.FC<SofaProps> = ({ navigation, route }) => {
               >
                 <Card center middle shadow style={styles.category}>
                   <Badge margin={[0, 0, 15]} size={50} color="rgba(41,216,143,0.20)">
-                    <Image source={item.image || require('../assets/images/avatar.png')} />
+                    {/* <Image source={item.image || require('../assets/images/avatar.png')}/> */}
+                    {/* <Image source={require('../assets/images/avatar.png')}/> */}
+                    <Image source={item.image} style={styles.image} resizeMode='cover'/>
                   </Badge>
                   <Text medium height={20}>{item.name}</Text>
                   <Text gray caption>{item.count} options</Text>
@@ -143,6 +146,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: theme.colors.gray,
     marginTop: 10,
+  },
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
+    marginBottom: 10,
   },
   avatar: {
     width: 40,

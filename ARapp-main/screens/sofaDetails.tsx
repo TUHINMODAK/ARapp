@@ -19,6 +19,8 @@ const SofaDetails: React.FC<SofaDetailsProps> = ({ route, navigation }) => {
   // Fetch the variants for the given product ID
   const variants = sofaDetails[id];
 
+  console.log(variants);
+
   const handleVariantPress = (variant: any) => {
     // Optional: Navigate to a detailed variant view or perform an action
     // navigation.navigate('VariantDetails', { variant });
