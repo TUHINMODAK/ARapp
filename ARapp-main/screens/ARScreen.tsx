@@ -11,7 +11,7 @@ import {
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/types';
-import { furnitureModels, FurnitureModelKey } from '../constants/mocks1'; // Import from your mocks file
+import { furnitureModels, FurnitureModelKey } from '../constants/mocks1main'; // Import from your mocks file
 
 type Position = [number, number, number];
 type Scale = [number, number, number];

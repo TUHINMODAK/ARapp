@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Dimensions, Image, StyleSheet, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Card, Badge, Block, Text } from '../components';
 import { theme } from '../constants';
-import { sofas, diningTables, beds, closets, chairs, officeDesks } from '../constants/mocks1'; // Import from the data file
 import { RouteProp } from '@react-navigation/native';
 import { profile } from '../constants/mocks';
+import { Mocks1 } from '../constants/Mocks1';
 
 const { width } = Dimensions.get('window');
 
@@ -37,6 +37,14 @@ interface SofaProps {
 }
 
 const Sofa1: React.FC<SofaProps> = ({ navigation, route }) => {
+  const { furnitures } = useContext(Mocks1);
+  const { sofas } = furnitures;
+  const {diningTables} = furnitures;
+  const {beds} = furnitures;
+  const {closets} = furnitures;
+  const {chairs} = furnitures;
+  const {officeDesks} = furnitures;
+
   // Map category names to their corresponding data arrays
   const categoryDataMap: CategoryDataMap = {
     'Sofa': sofas,
@@ -55,50 +63,50 @@ const Sofa1: React.FC<SofaProps> = ({ navigation, route }) => {
   const filteredOptions = categoryDataMap[category.name] || [];
 
   return (
-    
-<Block>
-  <Block flex={false} row center space="between" style={styles.header}>
-    <Text h1 bold>{category?.name || "Category"} Sets</Text>
-    <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
-      <View style={styles.avatarContainer}>
-        <Image source={profile.avatar || require('../assets/images/avatar.png')} style={styles.avatar} />
-      </View>
-    </TouchableOpacity>
-  </Block>
 
-  {/* Divider */}
-  <View style={styles.divider} />
+    <Block>
+      <Block flex={false} row center space="between" style={styles.header}>
+        <Text h1 bold>{category?.name || "Category"} Sets</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+          <View style={styles.avatarContainer}>
+            <Image source={profile.avatar || require('../assets/images/avatar.png')} style={styles.avatar} />
+          </View>
+        </TouchableOpacity>
+      </Block>
 
-  <ScrollView
-    showsVerticalScrollIndicator={false}
-    style={{ paddingVertical: theme.sizes.base * 2 }}
-  >
-    <Block flex={false} row space="between" style={styles.categories}>
-      {filteredOptions.length > 0 ? (
-        filteredOptions.map((item) => (
-          <TouchableOpacity
-            key={item.id}
-            onPress={() => navigation.navigate('SofaDetails', {
-              id: item.id,
-              categoryName: category.name,
-            })}
-          >
-            <Card center middle shadow style={styles.category}>
-              <Badge margin={[0, 0, 15]} size={50} color="rgba(41,216,143,0.20)">
-                <Image source={item.image || require('../assets/images/avatar.png')} />
-              </Badge>
-              <Text medium height={20}>{item.name}</Text>
-              <Text gray caption>{item.count} options</Text>
-            </Card>
-          </TouchableOpacity>
-        ))
-      ) : (
-      <Text gray caption>No products available </Text>
-        
-      )}
+      {/* Divider */}
+      <View style={styles.divider} />
+
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        style={{ paddingVertical: theme.sizes.base * 2 }}
+      >
+        <Block flex={false} row space="between" style={styles.categories}>
+          {filteredOptions.length > 0 ? (
+            filteredOptions.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={() => navigation.navigate('SofaDetails', {
+                  id: item.id,
+                  categoryName: category.name,
+                })}
+              >
+                <Card center middle shadow style={styles.category}>
+                  <Badge margin={[0, 0, 15]} size={50} color="rgba(41,216,143,0.20)">
+                    <Image source={item.image || require('../assets/images/avatar.png')} />
+                  </Badge>
+                  <Text medium height={20}>{item.name}</Text>
+                  <Text gray caption>{item.count} options</Text>
+                </Card>
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text gray caption>No products available </Text>
+
+          )}
+        </Block>
+      </ScrollView>
     </Block>
-  </ScrollView>
-</Block>
 
   );
 };

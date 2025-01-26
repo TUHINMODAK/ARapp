@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, SafeAreaView } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../navigation/types';
-import { sofaDetails } from '../constants/mocks1'; // Ensure proper import
+import { Mocks1 } from '../constants/Mocks1';
 
 type ResultPageRouteProp = RouteProp<RootStackParamList, 'ResultPage'>;
 
@@ -12,6 +12,7 @@ interface ResultPageProps {
 
 const ResultPage: React.FC<ResultPageProps> = ({ route }) => {
   const { dimensions, roomType, furnitureType, detectedColor } = route.params || {};
+  const { sofaDetails } = useContext(Mocks1);
 
   if (!dimensions || !roomType || !furnitureType || !detectedColor) {
     return (

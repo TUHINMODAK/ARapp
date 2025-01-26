@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/types';
-import { sofaDetails } from '../constants/mocks1';
+import { Mocks1 } from '../constants/Mocks1';
 
 type SofaDetailsProps = {
   route: RouteProp<RootStackParamList, 'SofaDetails'>;
@@ -14,6 +14,7 @@ const { width } = Dimensions.get('window');
 
 const SofaDetails: React.FC<SofaDetailsProps> = ({ route, navigation }) => {
   const { id } = route.params;
+  const { sofaDetails } = useContext(Mocks1);
 
   // Fetch the variants for the given product ID
   const variants = sofaDetails[id];
