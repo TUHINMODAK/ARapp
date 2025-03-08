@@ -43,7 +43,7 @@ export const Mocks1 = createContext<Mocks1ContextType>({
   useEffect(() => {
     const getdata = async () => {
 
-      await axios.get('http://192.168.1.2:5000/items') // Replace with your backend's IP/URL
+      await axios.get('http://192.168.0.5:5000/items') // Replace with your backend's IP/URL
         .then((response) => {
           const datas = response.data;
           datas.forEach((element: { name: any; }) => {
@@ -61,7 +61,7 @@ export const Mocks1 = createContext<Mocks1ContextType>({
           console.error('Error fetching data (items):', error);
         });
 
-      await axios.get('http://192.168.1.2:5000/furnitures') // Replace with your backend's IP/URL
+      await axios.get('http://192.168.0.5:5000/furnitures') // Replace with your backend's IP/URL
         .then((response) => {
           const datas = response.data;
           datas.forEach((element: { type: string | number; id: any; name: any; count: any; image: any; }) => {
@@ -84,7 +84,7 @@ export const Mocks1 = createContext<Mocks1ContextType>({
           console.error('Error fetching data (furnitures):', error);
         });
 
-      await axios.get('http://192.168.1.2:5000/variants') // Replace with your backend's IP/URL
+      await axios.get('http://192.168.0.5:5000/variants') // Replace with your backend's IP/URL
         .then((response) => {
           const datas = response.data;
           datas.forEach((element: { name: any; image: any; color: any; price: any; dimensions: any; roomType: any; furnitureType: any; type: any; }) => {
