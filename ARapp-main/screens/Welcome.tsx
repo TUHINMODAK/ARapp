@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Animated, Dimensions, Image, FlatList, Modal, StyleSheet, ScrollView } from 'react-native';
-import { NavigationProp, ParamListBase } from '@react-navigation/native';
+import { Animated, Dimensions, Image, FlatList, Modal, StyleSheet, ScrollView, BackHandler } from 'react-native';
+import { NavigationProp, ParamListBase, useFocusEffect } from '@react-navigation/native';
 import { Button, Block, Text } from '../components';
 import { theme } from '../constants';
-
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,6 +15,40 @@ interface WelcomeProps {
 interface WelcomeState {
   showTerms: boolean;
 }
+
+// HOC to handle back button blocking
+const withBackButtonBlocking = (WrappedComponent: any) => {
+  return (props: any) => {
+    // Use the useFocusEffect hook to handle the back button
+    useFocusEffect(
+      React.useCallback(() => {
+        // This function will be called when the screen comes into focus
+        const onBackPress = () => {
+          // Return true to prevent going back
+          return true;
+        };
+
+        // Add event listener for the hardware back button
+        BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+        // Clean up function to be called when the screen loses focus
+        return () => {
+          BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        };
+      }, [])
+    );
+
+    // Also disable the gesture for going back (swipe)
+    React.useEffect(() => {
+      props.navigation.setOptions({
+        gestureEnabled: false,
+      });
+    }, [props.navigation]);
+
+    // Return the original component with all props
+    return <WrappedComponent {...props} />;
+  };
+};
 
 class Welcome extends Component<WelcomeProps, WelcomeState> {
   static navigationOptions = {
@@ -40,6 +73,13 @@ class Welcome extends Component<WelcomeProps, WelcomeState> {
 
   componentDidMount() {
     this.startAutoScroll();
+    
+    // Disable going back when this component mounts
+    const { navigation } = this.props;
+    navigation.setOptions({
+      headerLeft: null, // Remove the back button from the header
+      gestureEnabled: false, // Disable swipe gesture
+    });
   }
 
   componentWillUnmount() {
@@ -190,4 +230,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Welcome;
+// Export the enhanced component with back button blocking
+export default withBackButtonBlocking(Welcome);

@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Keyboard, View, KeyboardAvoidingView, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button, Block, Input, Text } from '../components';
 import { theme } from '../constants';
 import { StackNavigationProp } from '@react-navigation/stack';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';  
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../configs/FirebaseConfig'; // Ensure you have the correct Firebase config
+import { RootStackParamList } from '../navigation/types';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-type RootStackParamList = {
-  Login: undefined;
-  Browse: undefined;
-  Forgot: undefined;
-};
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../configs/FirebaseConfig';
+
+
 
 type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
@@ -38,9 +36,12 @@ export default class Login extends Component<LoginProps, LoginState> {
 
   handleLogin = () => {
     const { navigation } = this.props;
-    const { email, password } = this.state;
+     //const { email, password } = this.state;
+    const email = "bcrec@gmail.com";
+    const password = "Bc@2025";
     const errors: string[] = [];
-
+    const username = "Suvajit Garai";
+   
     Keyboard.dismiss();
     this.setState({ loading: true });
 
@@ -59,7 +60,8 @@ export default class Login extends Component<LoginProps, LoginState> {
     signInWithEmailAndPassword(auth, email, password)
       .then(() => {
         this.setState({ loading: false });
-        navigation.navigate('Browse');
+        // Explicitly pass username parameter for Browse route
+        navigation.navigate('Browse', { username: username });
       })
       .catch((error) => {
         console.error(error);
@@ -97,7 +99,7 @@ export default class Login extends Component<LoginProps, LoginState> {
               style={[styles.input, hasErrors('email') && styles.hasErrors]}
               placeholder="Enter your email"
               value={email}
-              onChangeText={(text: any) => this.setState({ email: text })}
+              onChangeText={(text: string) => this.setState({ email: text })}
             />
             <Input
               secure={!showPassword}
@@ -106,7 +108,7 @@ export default class Login extends Component<LoginProps, LoginState> {
               style={[styles.input, hasErrors('password') && styles.hasErrors]}
               placeholder="Enter your password"
               value={password}
-              onChangeText={(text: any) => this.setState({ password: text })}
+              onChangeText={(text: string) => this.setState({ password: text })}
               rightIcon={
                 <TouchableOpacity onPress={this.togglePasswordVisibility}>
                   <FontAwesome

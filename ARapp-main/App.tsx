@@ -25,8 +25,6 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import Navigation from './navigation';
 import { Block } from './components';
-import { Mocks1Provider } from './constants/Mocks1';
-// import { Mocks1Provider } from './constants/Mocks1';
 
 const images = [
   require('./assets/icons/back.png'),
@@ -73,22 +71,16 @@ const App = () => {
 
   if (!isLoadingComplete) {
     return (
-      <Mocks1Provider>
-
-        <View style={styles.loadingContainer}>
-          <Text style={styles.loadingText}>Loading...</Text>
-        </View>
-      </Mocks1Provider>
+      <View style={styles.loadingContainer}>
+        <Text style={styles.loadingText}>Loading...</Text>
+      </View>
     );
   }
 
   return (
-    <Mocks1Provider>
-
-      <Block color="white">
-        <Navigation />
-      </Block>
-    </Mocks1Provider>
+    <Block color="white">
+      <Navigation />
+    </Block>
   );
 };
 

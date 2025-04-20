@@ -133,17 +133,22 @@ const styles = StyleSheet.create({
   signup: {
     flex: 1,
     justifyContent: 'center',
+    padding: 20,
+    
   },
   input: {
     borderRadius: 0,
     borderWidth: 0,
     borderBottomColor: theme.colors.gray2,
     borderBottomWidth: StyleSheet.hairlineWidth,
+    
   },
   hasErrors: {
     borderBottomColor: theme.colors.accent,
   },
+  
   title: {
+   
     fontSize: 30,
     marginBottom: 0,
     marginTop: 100,

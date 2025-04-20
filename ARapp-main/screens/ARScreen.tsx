@@ -1,135 +1,201 @@
-import React, { useState } from "react";
-import { ViroARPlaneSelector } from "@reactvision/react-viro";
-import { StyleSheet, View } from "react-native";
+import React, { useState, useEffect } from "react";
 import {
-    ViroARSceneNavigator,
-    ViroARScene,
-    Viro3DObject,
-    ViroAmbientLight,
-    ViroTrackingStateConstants,
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import {
+  ViroARSceneNavigator,
+  ViroARScene,
+  Viro3DObject,
+  ViroAmbientLight,
+  ViroARPlaneSelector,
+  ViroTrackingStateConstants
 } from "@reactvision/react-viro";
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
-import { RootStackParamList } from '../navigation/types';
-import { furnitureModels, FurnitureModelKey } from '../constants/mocks1main'; // Import from your mocks file
+import { RouteProp } from "@react-navigation/native";
+import { furnitureModels, FurnitureModelKey } from "../constants/mocks";
+import { sofaDetails ,FurnitureVariant} from "../constants/mocks1";
+import { RootStackParamList } from "../navigation/types";
 
+// Type definitions
 type Position = [number, number, number];
 type Scale = [number, number, number];
-
 type Rotation = [number, number, number];
 
 interface HelloWorldSceneARProps {
-    viroAppProps: {
-        variantName?: string;
-    };
-    route?: RouteProp<RootStackParamList, 'ARscene'>;
-    navigation?: StackNavigationProp<RootStackParamList, 'ARscene'>;
+  selectedModel: FurnitureModelKey;
 }
 
-const HelloWorldSceneAR: React.FC<HelloWorldSceneARProps> = ({ route }) => {
-    const [text, setText] = useState("Initializing AR...");
-    const [scale, setScale] = useState<Scale>([0.2, 0.2, 0.2]);
-    const [position, setPosition] = useState<Position>([0, -0.5, -1]);
-    const [rotation, setRotation] = useState<Rotation>([0, 0, 0]);
-
-    // Narrow the type of variantName
-    const variantName = (route?.params?.variantName || 'default') as FurnitureModelKey;
-    const modelSource = furnitureModels[variantName];
-
-    const _onDrag = (dragToPos: Position) => {
-        setPosition(dragToPos);
-    };
-
-    const handlePinch = (pinchState: number, scaleFactor: number) => {
-        if (pinchState === 3) {
-            const newScale: Scale = [
-                Math.max(0.05, Math.min(scale[0] * scaleFactor, 2)),
-                Math.max(0.05, Math.min(scale[1] * scaleFactor, 2)),
-                Math.max(0.05, Math.min(scale[2] * scaleFactor, 2)),
-            ];
-            setScale(newScale);
-        }
-    };
-
-    const _onRotate = (rotateState: number, rotationFactor: number) => {
-    if (rotateState === 2) { // During the rotation gesture
-        const newRotation: Rotation = [
-            rotation[0],
-            rotation[1] - rotationFactor,
-            rotation[2],
-        ];
-        setRotation(newRotation); // Update rotation incrementally
-    } else if (rotateState === 3) { // When the gesture ends
-        console.log("Rotation gesture ended");
-    }
-};
-
-    function onInitialized(state: any, reason: any) {
-        console.log("onInitialized:", state, reason);
-        if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
-            setText("Place your furniture!");
-        }
-    }
-
-    return (
-        <ViroARScene onTrackingUpdated={onInitialized}>
-            <ViroAmbientLight color={"#ffffff"} />
-            <ViroARPlaneSelector>
-                <Viro3DObject
-                    source={modelSource}
-                    type="GLB"
-                    scale={scale}
-                    position={position}
-                    rotation={rotation}
-                    dragType="FixedToWorld"
-                    onDrag={_onDrag}
-                    onPinch={handlePinch}
-                    onRotate={_onRotate}
-                    animation={{
-                        name: "Take 001",
-                        run: true,
-                        loop: true,
-                        delay: 1000,
-                    }}
-                />
-            </ViroARPlaneSelector>
-        </ViroARScene>
-    );
-};
-
-const ARSceneWithOptions = ({ route, navigation }: {
-    route: RouteProp<RootStackParamList, 'ARscene'>,
-    navigation: StackNavigationProp<RootStackParamList, 'ARscene'>
+// AR Scene Component
+const HelloWorldSceneAR: React.FC<HelloWorldSceneARProps> = ({
+  selectedModel,
 }) => {
-    const { variantName } = route.params;
+   const [text, setText] = useState("Initializing AR...");
+  const [scale, setScale] = useState<Scale>([0.2, 0.2, 0.2]);
+  const [position, setPosition] = useState<Position>([0, -0.5, -1]);
+  const [rotation, setRotation] = useState<Rotation>([0, 0, 0]);
 
-    // Wrapper function to ensure proper props passing to the scene
-    const HelloWorldSceneARWithProps = () => {
-        return <HelloWorldSceneAR
-            viroAppProps={{
-                variantName: variantName
-            }}
-            route={route}
-        />;
-    };
+  const modelSource = furnitureModels[selectedModel];
+//console.log(modelSource);
+  const _onDrag = (dragToPos: Position) => {
+    setPosition(dragToPos);
+  };
 
-    return (
-        <View style={styles.mainView}>
-            <ViroARSceneNavigator
-                autofocus={true}
-                initialScene={{
-                    scene: HelloWorldSceneARWithProps,
-                }}
-                style={{ flex: 1 }}
-            />
-        </View>
-    );
+  const handlePinch = (pinchState: number, scaleFactor: number) => {
+    if (pinchState === 3) {
+      const newScale: Scale = [
+        Math.max(0.05, Math.min(scale[0] * scaleFactor, 2)),
+        Math.max(0.05, Math.min(scale[1] * scaleFactor, 2)),
+        Math.max(0.05, Math.min(scale[2] * scaleFactor, 2)),
+      ];
+      setScale(newScale);
+    }
+  };
+
+  const _onRotate = (rotateState: number, rotationFactor: number) => {
+    if (rotateState === 2) {
+      const newRotation: Rotation = [
+        rotation[0],
+        rotation[1] - rotationFactor,
+        rotation[2],
+      ];
+      setRotation(newRotation);
+    }
+  };
+
+   function onInitialized(state: any, reason: any) {
+              console.log("onInitialized:", state, reason);
+              if (state === ViroTrackingStateConstants.TRACKING_NORMAL) {
+                  setText("Place your furniture!");
+              }
+          }
+
+  console.log(selectedModel);
+  return (
+    <ViroARScene  onTrackingUpdated={onInitialized}>
+      <ViroAmbientLight color="#ffffff" />
+      <ViroARPlaneSelector>
+        <Viro3DObject
+          key={selectedModel} // Force re-render on model change
+          source={modelSource}
+          type="GLB"
+          scale={scale}
+          position={position}
+          rotation={rotation}
+          dragType="FixedToWorld"
+          onDrag={_onDrag}
+          onPinch={handlePinch}
+          onRotate={_onRotate}
+        />
+      </ViroARPlaneSelector>
+    </ViroARScene>
+  );
 };
 
+// AR Scene Navigator with Options
+const ARSceneWithOptions = ({
+  route,
+}: {
+  route: RouteProp<RootStackParamList, "ARscene">;
+}) => {
+  const initialModel =
+    (route.params?.variantName as FurnitureModelKey) || "default";
+  const furnitureVariant = route.params?.furnitureType || "Sofa"; // Default to "Sofa" if not provided
+  const [selectedModel, setSelectedModel] =
+    useState<FurnitureModelKey>(initialModel);
+
+  // Filter sofaDetails based on furnitureVariant
+  const filteredFurniture = Object.keys(sofaDetails)
+    .filter((key) =>
+      sofaDetails[key].some(
+        (variant) => variant.furnitureType === furnitureVariant
+      )
+    )
+    .flatMap((key) => sofaDetails[key]); // Flatten the filtered data
+
+  const renderFurnitureOption = ({ item }: { item: FurnitureVariant }) => {
+    return (
+      <TouchableOpacity
+        style={styles.optionContainer}
+        onPress={() => setSelectedModel(item.modelSource)} // Update selected model dynamically
+      >
+        {item.image ? (
+          <Image source={item.image} style={styles.thumbnail} />
+        ) : (
+          <View style={styles.missingThumbnail}>
+            <Text style={styles.optionText}>No Image</Text>
+          </View>
+        )}
+        <Text style={styles.optionText}>{item.name}</Text>
+      </TouchableOpacity>
+    );
+  };
+
+  return (
+    <View style={styles.mainView}>
+      <ViroARSceneNavigator
+        autofocus={true}
+        initialScene={{
+          scene: () => <HelloWorldSceneAR selectedModel={selectedModel} />, // Pass selectedModel
+        }}
+        key={selectedModel} // Force re-render when selectedModel changes
+        style={{ flex: 1 }}
+      />
+
+      <View style={styles.optionsContainer}>
+        <FlatList
+          horizontal
+          data={filteredFurniture} // Use filtered furniture variants
+          renderItem={renderFurnitureOption}
+          keyExtractor={(item, index) => `${item.name}-${index}`} // Unique key for each item
+          showsHorizontalScrollIndicator={false}
+        />
+      </View>
+    </View>
+  );
+};
+
+
+// Styles
 const styles = StyleSheet.create({
-    mainView: {
-        flex: 1,
-    },
+  mainView: {
+    flex: 1,
+  },
+  optionsContainer: {
+    position: "absolute",
+    bottom: 20,
+    width: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.95)",
+    borderRadius: 10,
+    padding: 10,
+  },
+  optionContainer: {
+    alignItems: "center",
+    marginHorizontal: 10,
+  },
+  thumbnail: {
+    width: 50,
+    height: 50,
+    borderRadius: 5,
+    resizeMode: "cover",
+  },
+  missingThumbnail: {
+    width: 50,
+    height: 50,
+    borderRadius: 5,
+    backgroundColor: "#ddd",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  optionText: {
+    marginTop: 5,
+    fontSize: 12,
+    textAlign: "center",
+    color: "#333",
+  },
 });
 
 export default ARSceneWithOptions;

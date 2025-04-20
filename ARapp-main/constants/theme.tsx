@@ -9,6 +9,7 @@ const colors = {
     gray2: "#C0BFC0",
     gray3: '#808080',
     gray4: "#696969",
+    red:"#e52931"
   };
   
   const sizes = {

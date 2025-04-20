@@ -19,6 +19,9 @@ import { theme } from '../constants';
 import CameraComponent from '../screens/Camera1';
 import FormPage from '../screens/FormPage';
 import ResultPage from '../screens/ResultPage';
+import Demo from '../screens/demo';
+import ARScene from '../screens/ARScene';
+import Sug from '../screens/Sug';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -116,7 +119,14 @@ export default function Navigation() {
         </Stack.Screen>
 
         <Stack.Screen name="Explore" component={Explore} />
-        
+        <Stack.Screen
+          name="Sug"
+          component={Sug}
+          options={{
+            headerShadowVisible: false,
+            headerShown: false,
+          }}
+        />
 
         <Stack.Screen
           name="Settings"
@@ -128,7 +138,10 @@ export default function Navigation() {
           {(props) => <Settings {...props} profile={profile} />}
         </Stack.Screen>
 
-        <Stack.Screen name="ARscene" component={ARSceneWithOptions} />
+        <Stack.Screen name="ARScene" component={ARScene} />
+        
+        <Stack.Screen name="demo" component={Demo} />
+
 
         <Stack.Screen
           name="SofaDetails"

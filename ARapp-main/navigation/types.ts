@@ -1,24 +1,41 @@
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { Int32 } from 'react-native/Libraries/Types/CodegenTypes';
 
 export type RootStackParamList = {
   Welcome: undefined;
   Login: undefined;
   SignUp: undefined;
   Forgot: undefined;
-  Browse: undefined;
+  Browse: {
+    username:string;
+  };
   Explore: undefined;
   FormPage: {
     detectedColor :string;
+    hexCode:string;
+    genderSpecific:object;
   };
   Product: undefined;
   ResultPage: { 
     dimensions: string; 
     roomType: string; 
     furnitureType: string;
-    detectedColor: string; // Added detectedColor to ResultPage parameters
+    detectedColor: string; 
+    hexCode:string;
+    genderSpecificColor:object;
+    //furnitureRecommendations:object;
   };
-  Settings: undefined;
+  Settings: {username:string};
+  ARCarDemo:{
+    furnitureType:string;
+    variantName:string;
+  };
+  Sug:{
+    id: string; 
+    categoryName?: string;
+
+  }
   Cam: undefined;
   SofaDetails: { 
     id: string; 
@@ -30,9 +47,12 @@ export type RootStackParamList = {
       // Add other category properties as needed
     };
   };
-  ARscene: { 
+  ARScene: { 
+    furnitureType:string;
     variantName: string;
+    
   };
+  demo:undefined;
 };
 
 // Navigation prop type for screens

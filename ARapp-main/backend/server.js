@@ -28,6 +28,31 @@ client
 // console.log(process.env.MONGO_URI) // remove this after you've confirmed it is working
 //get all passwords
 
+// API for users
+app.post("/signup", async(req, res) => {
+  // console.log(req)
+  const password = req.body;
+  const collection = db.collection('passwords');
+  const findResult = await collection.insertOne(password);
+  res.send({success: true})
+})
+
+app.get("/login/:email", async(req, res) => {
+  console.log(req.params.email);
+  const email = req.params.email;
+  console.log(email);
+  const collection = db.collection('passwords');
+  const findResult = await collection.findOne({email});
+  res.send(findResult);
+})
+
+// API for items
+app.get("/gggg", async (req, res) => {
+  const collection = db.collection("items");
+  const findResult = await collection.find({}).toArray();
+  res.send(findResult);
+});
+
 // API for items
 app.get("/items", async (req, res) => {
   const collection = db.collection("items");

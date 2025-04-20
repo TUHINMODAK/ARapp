@@ -16,7 +16,7 @@ for i, color in enumerate(colors):
     histogram = cv2.calcHist([image_rgb], [i], None, [256], [0, 256])
     plt.plot(histogram, color=color)
     plt.xlim([0, 256])
-    plt.title('Histogram for ' + color.upper() + ' channel')
+    plt.title('Histogram for ' + 'Red,Green,Blue' + ' channel')
 
 plt.xlabel('Pixel Intensity')
 plt.ylabel('Frequency')

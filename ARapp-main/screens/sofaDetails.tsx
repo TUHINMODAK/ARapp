@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/types';
-import { Mocks1 } from '../constants/Mocks1';
+import { sofaDetails } from '../constants/mocks1';
 
 type SofaDetailsProps = {
   route: RouteProp<RootStackParamList, 'SofaDetails'>;
@@ -14,12 +14,9 @@ const { width } = Dimensions.get('window');
 
 const SofaDetails: React.FC<SofaDetailsProps> = ({ route, navigation }) => {
   const { id } = route.params;
-  const { sofaDetails } = useContext(Mocks1);
 
   // Fetch the variants for the given product ID
   const variants = sofaDetails[id];
-
-  console.log(variants);
 
   const handleVariantPress = (variant: any) => {
     // Optional: Navigate to a detailed variant view or perform an action
@@ -50,10 +47,13 @@ const SofaDetails: React.FC<SofaDetailsProps> = ({ route, navigation }) => {
           <TouchableOpacity
           key={index}
           style={styles.card}
-          onPress={() => navigation.navigate('ARscene', { 
-            variantName: variant.name 
+          onPress={() => navigation.navigate('ARScene', { 
+            furnitureType:variant.furnitureType,
+            variantName: variant.name,
+        
           })}
         >
+          
             <Image
               source={variant.image}
               style={styles.image}
@@ -62,6 +62,7 @@ const SofaDetails: React.FC<SofaDetailsProps> = ({ route, navigation }) => {
             />
             <View style={styles.variantInfo}>
               <Text style={styles.name}>{variant.name}</Text>
+              
               {variant.price && (
                 <Text style={styles.price}>₹{variant.price.toFixed(2)}</Text>
               )}

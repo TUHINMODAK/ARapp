@@ -74,15 +74,35 @@ const categories = [
     require('../assets/images/explore_6.png'),
   ];
   
-  const profile = {
+
+  const avatarOptions = [
+    require('../assets/images/avatar.png'),
+    require('../assets/images/avatar2.png'),
+    require('../assets/images/avatar3.png'),
+    require('../assets/images/avatar4.png'),
+    require('../assets/images/avatar5.png'),
+    require('../assets/images/avatar6.png'),
+    require('../assets/images/avatar7.png'),
+    require('../assets/images/avatar8.png'),
+    require('../assets/images/avatar9.png'),
+    require('../assets/images/avatar10.png'),
+    
+  ];
+  
+   let profile = {
     username: 'ARAPP',
     location: 'India',
     email: 'contact@react-ui-kit.com',
-    avatar: require('../assets/images/avatar.png'),
+    avatar: avatarOptions[0], // Use the first avatar as default
     budget: 1000,
     monthly_cap: 5000,
     notifications: true,
     newsletter: false,
+  };
+  
+  // Add this function to update the mock profile
+  export const updateMockProfile = (newProfile: Partial<typeof profile>) => {
+    profile = { ...profile, ...newProfile };
   };
   
   export {
@@ -90,4 +110,63 @@ const categories = [
     explore,
     products,
     profile,
+    avatarOptions,
   }
+  export type FurnitureModelKey = 
+  'Modern Sofa - Variant 1' | 
+'Modern Sofa - Variant 2' | 
+'Classic Sofa - Variant 1' | 
+'Classic Sofa - Variant 2' | 
+'L-Shaped Sofa - Variant 1' | 
+'L-Shaped Sofa - Variant 2' | 
+'Wooden Dining Table - Variant 1' | 
+'Wooden Dining Table - Variant 2' | 
+'Glass Dining Table - Variant 1' | 
+'Glass Dining Table - Variant 2' | 
+'Queen Size Bed - Variant 1' | 
+'Queen Size Bed - Variant 2' | 
+'King Size Bed - Variant 1' | 
+'King Size Bed - Variant 2' | 
+'Sliding Door Closet - Variant 1' | 
+'Sliding Door Closet - Variant 2' | 
+'Classic Wooden Closet - Variant 1' | 
+'Classic Wooden Closet - Variant 2' | 
+'Office Chair - Variant 1' | 
+'Office Chair - Variant 2' | 
+'Dining Chair - Variant 1' | 
+'Dining Chair - Variant 2' | 
+'Wooden Office Desk - Variant 1' | 
+'Wooden Office Desk - Variant 2' | 
+'Modern Office Desk - Variant 1' | 
+'Modern Office Desk - Variant 2' | 
+'default';
+
+export const furnitureModels: Record<FurnitureModelKey, any> = {
+ 'Modern Sofa - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Modern Sofa - Variant 2': require("../assets/res/modified_bramie1.glb"),
+  'Classic Sofa - Variant 1': require("../assets/res/old_tv_stand.glb"),
+  'Classic Sofa - Variant 2': require("../assets/res/c.glb"),
+  'L-Shaped Sofa - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'L-Shaped Sofa - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Wooden Dining Table - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Wooden Dining Table - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Glass Dining Table - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Glass Dining Table - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Queen Size Bed - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Queen Size Bed - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'King Size Bed - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'King Size Bed - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Sliding Door Closet - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Sliding Door Closet - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Classic Wooden Closet - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Classic Wooden Closet - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Office Chair - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Office Chair - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Dining Chair - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Dining Chair - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Wooden Office Desk - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Wooden Office Desk - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'Modern Office Desk - Variant 1': require("../assets/res/office_sofa_-25mb.glb"),
+  'Modern Office Desk - Variant 2': require("../assets/res/office_sofa_-25mb.glb"),
+  'default': require("../assets/res/old_tv_stand.glb")
+};
