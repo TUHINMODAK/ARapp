@@ -45,4 +45,4 @@ cd interior-design-ar
 npm install
 
 # Start the project
-npx reactnative start:android
+npx react-native run-android
