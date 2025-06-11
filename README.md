@@ -27,7 +27,6 @@
 | Technology                  | Purpose                                |
 |----------------------------|----------------------------------------|
 | React Native (TypeScript)  | Core mobile app development            |
-| Expo                       | Simplified build, test, and preview    |
 | @reactvision/react-viro    | AR view and object rendering           |
 | Three.js (via GLTF models) | 3D model compatibility and rendering   |
 | Figma/Canva                | UI design prototyping                  |
